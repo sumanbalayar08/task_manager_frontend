@@ -132,8 +132,10 @@ src/
 
 The frontend expects the following API endpoints:
 
-- `POST /api/auth/register` - User registration
-- `POST /api/auth/login` - User authentication
+- `POST /api/register` - User registration
+- `POST /api/login` - User authentication
+- `GET /api/me` - Get current user
+- `GET /api/logout` - Logout user
 - `GET /api/tasks` - Fetch user tasks
 - `POST /api/tasks` - Create new task
 - `PUT /api/tasks/:id` - Update existing task
