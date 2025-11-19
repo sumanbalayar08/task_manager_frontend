@@ -29,7 +29,8 @@ export default function SignInForm() {
   const onSubmit = async (data: LoginFormValues) => {
     setFormError(null);
     try {
-      await login(data);
+      const res = await login(data);
+      console.log(res);
       toast.success("Login successful");
       navigate('/');
     } catch (error: any) {

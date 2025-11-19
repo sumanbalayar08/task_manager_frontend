@@ -9,6 +9,7 @@ export const useRegisterMutation = () => {
   return useMutation<RegisterResponse, Error, RegisterRequest>({
     mutationFn: async (data: RegisterRequest) => {
       const res = await apiClient.post(AUTH_ENDPOINTS.REGISTER, data);
+      console.log(res);
       return res.data;
     },
   });

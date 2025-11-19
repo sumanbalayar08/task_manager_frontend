@@ -27,7 +27,8 @@ export default function SignUpForm() {
   const onSubmit = async (data: RegisterFormValues) => {
     setFormError(null);
     try {
-      await signUp(data);
+      const res = await signUp(data);
+      console.log(res);
       toast.success("Account created successfully!");
       navigate("/signin");
     } catch (error: any) {

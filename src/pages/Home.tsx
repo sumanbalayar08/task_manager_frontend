@@ -7,6 +7,7 @@ import { useGetTasks } from "../api/tasks/task.query";
 import { useDeleteTaskMutation, useUpdateTaskMutation, useCreateTaskMutation } from "../api/tasks/task.mutation";
 import type { Task, Priority } from "../types/tasks.types";
 import usePagination from "../hooks/use-pagination";
+import { useEffect } from "react";
 import Action from "../components/table/action";
 import Table from "../components/table";
 import Hero from "../components/hero/page";
@@ -50,11 +51,31 @@ export default function TasksPage() {
     desc as boolean,
   );
 
-  console.log(data);
-
   const deleteTask = useDeleteTaskMutation();
   const updateTask = useUpdateTaskMutation();
   const createTask = useCreateTaskMutation();
+
+  useEffect(() => {
+    if (!data?.pagination) return;
+
+    const total = data.pagination.total;
+    const perPage = pagination.perPage;
+    const totalPages = Math.ceil(total / perPage) || 1;
+
+    // prevent unnecessary state updates → prevents infinite loop
+    setPagination(prev => {
+      if (prev.total === total && prev.totalPages === totalPages) {
+        return prev; // no change → no re-render → no loop
+      }
+
+      return {
+        ...prev,
+        total,
+        totalPages,
+      };
+    });
+  }, [data?.pagination?.total, pagination.perPage]);
+
 
   const isTaskOverdue = (endDate: string) => {
     const today = new Date();
