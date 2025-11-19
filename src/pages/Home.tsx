@@ -13,6 +13,9 @@ import Table from "../components/table";
 import Hero from "../components/hero/page";
 import DeleteModal from "../components/modal/delete-modal";
 import { Button } from "../components/ui/button";
+import { useLogoutMutation } from "../api/auth/auth.mutation";
+import { useNavigate } from "react-router-dom";
+import { LogOut } from "lucide-react";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
@@ -23,6 +26,18 @@ import Modal from "../components/ui/modal";
 
 export default function TasksPage() {
   const [pagination, setPagination] = usePagination();
+  const logoutMutation = useLogoutMutation();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await logoutMutation.mutateAsync(undefined);
+      navigate('/signin');
+    } catch (error) {
+      navigate('/signin');
+    }
+  }
+
   const [viewTask, setViewTask] = useState<Task | null>(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -218,11 +233,23 @@ export default function TasksPage() {
 
   return (
     <>
-      <Hero
-        title="Task Manager"
-        subtitle="Manage all your tasks, track their progress, and organize your work."
-        badge="Tasks"
-      />
+      <div className="relative">
+        <Hero
+          title="Task Manager"
+          subtitle="Manage all your tasks, track their progress, and organize your work."
+          badge="Tasks"
+        />
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleLogout}
+          disabled={logoutMutation.isPending}
+          className="absolute top-8 right-8 flex items-center gap-2"
+        >
+          <LogOut className="h-4 w-4" />
+          {logoutMutation.isPending ? 'Signing out...' : 'Sign out'}
+        </Button>
+      </div>
       <section className="p-6 md:p-8 bg-white">
         <div className="mb-6 flex items-center justify-end flex-wrap gap-4">
           <div className="flex items-center gap-4">

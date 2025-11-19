@@ -33,5 +33,8 @@ export const useLogoutMutation = () => {
       const res = await apiClient.post(AUTH_ENDPOINTS.LOGOUT);
       return res.data;
     },
+    onSuccess: () => {
+      queryClient.clear();
+    },
   });
 };
